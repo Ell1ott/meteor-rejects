@@ -1,43 +1,28 @@
 package anticope.rejects.modules;
 
 import anticope.rejects.MeteorRejectsAddon;
-import anticope.rejects.events.ChunkPosDataEvent;
 import anticope.rejects.events.PlayerRespawnEvent;
 import anticope.rejects.events.SeedChangedEvent;
 import anticope.rejects.utils.Ore;
 import anticope.rejects.utils.seeds.Seed;
 import anticope.rejects.utils.seeds.Seeds;
 import baritone.api.BaritoneAPI;
+import com.seedfinding.mccore.version.MCVersion;
 import meteordevelopment.meteorclient.events.render.Render3DEvent;
+import meteordevelopment.meteorclient.events.world.ChunkDataEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
-import meteordevelopment.meteorclient.settings.BoolSetting;
-import meteordevelopment.meteorclient.settings.EnumSetting;
-import meteordevelopment.meteorclient.settings.IntSetting;
-import meteordevelopment.meteorclient.settings.Setting;
-import meteordevelopment.meteorclient.settings.SettingGroup;
+import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.ChunkRandom;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
-//import net.minecraft.world.chunk.world.random.ChunkRandom;
-import com.seedfinding.mccore.version.MCVersion;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class OreSim extends Module {
 
@@ -121,7 +106,7 @@ public class OreSim extends Module {
                         continue;
                     }
                     for (Vec3d pos : chunkRenderers.get(chunkKey).get(ore)) {
-                        event.renderer.boxLines(pos.x,pos.y,pos.z,pos.x+1,pos.y+1,pos.z+1, ore.color,0);
+                        event.renderer.boxLines(pos.x, pos.y, pos.z, pos.x + 1, pos.y + 1, pos.z + 1, ore.color, 0);
                     }
                 }
             }
@@ -166,11 +151,11 @@ public class OreSim extends Module {
             oreGoals.clear();
             var chunkPos = mc.player.getChunkPos();
             int rangeVal = 4;
-            for(int range = 0; range <= rangeVal; ++range) {
-                for(int x = -range + chunkPos.x; x <= range + chunkPos.x; ++x) {
+            for (int range = 0; range <= rangeVal; ++range) {
+                for (int x = -range + chunkPos.x; x <= range + chunkPos.x; ++x) {
                     oreGoals.addAll(addToBaritone(x, chunkPos.z + range - rangeVal));
                 }
-                for(int x = -range + 1 + chunkPos.x; x < range + chunkPos.x; ++x) {
+                for (int x = -range + 1 + chunkPos.x; x < range + chunkPos.x; ++x) {
                     oreGoals.addAll(this.addToBaritone(x, chunkPos.z - range + rangeVal + 1));
                 }
             }
@@ -179,20 +164,16 @@ public class OreSim extends Module {
 
     private ArrayList<BlockPos> addToBaritone(int chunkX, int chunkZ) {
         ArrayList<BlockPos> baritoneGoals = new ArrayList<>();
-        long chunkKey = (long)chunkX + ((long)chunkZ << 32);
+        long chunkKey = (long) chunkX + ((long) chunkZ << 32);
         if (!this.chunkRenderers.containsKey(chunkKey)) {
             return baritoneGoals;
         } else {
-            this.oreConfig.stream().filter((config) -> {
-                return (Boolean)config.enabled.get();
-            }).forEach((ore) -> {
-               chunkRenderers
-                .get(chunkKey)
-                .getOrDefault(ore, new HashSet<>())
-                .stream()
-                .map((vec3d) -> new BlockPos(vec3d))
-                .forEach(baritoneGoals::add);
-            });
+            this.oreConfig.stream().filter((config) -> config.enabled.get()).forEach((ore) -> chunkRenderers
+                    .get(chunkKey)
+                    .getOrDefault(ore, new HashSet<>())
+                    .stream()
+                    .map(BlockPos::ofFloored)
+                    .forEach(baritoneGoals::add));
             return baritoneGoals;
         }
     }
@@ -250,8 +231,8 @@ public class OreSim extends Module {
     }
 
     @EventHandler
-    public void onChunkData(ChunkPosDataEvent event) {
-        doMathOnChunk(event.chunkX, event.chunkZ);
+    public void onChunkData(ChunkDataEvent event) {
+        doMathOnChunk(event.chunk.getPos().x, event.chunk.getPos().z);
     }
 
     private void doMathOnChunk(int chunkX, int chunkZ) {
@@ -282,7 +263,7 @@ public class OreSim extends Module {
         long populationSeed = random.setPopulationSeed(worldSeed.seed, chunkX, chunkZ);
 
         var optional = world.getBiomeAccess().getBiomeForNoiseGen(new BlockPos(chunkX, 0, chunkZ)).getKeyOrValue();
-        Identifier id = (optional.right().isPresent()) ? world.getRegistryManager().get(Registry.BIOME_KEY).getId(optional.right().get()) : optional.left().get().getValue();
+        Identifier id = (optional.right().isPresent()) ? world.getRegistryManager().get(RegistryKeys.BIOME).getId(optional.right().get()) : optional.left().get().getValue();
         if (id == null) {
             error("Something went wrong, you may have some mods that mess with world generation");
             toggle();
@@ -332,7 +313,8 @@ public class OreSim extends Module {
                 y += ore.minY;
 
                 switch (ore.generator) {
-                    case DEFAULT -> ores.addAll(generateNormal(world, random, new BlockPos(x, y, z), ore.size, ore.discardOnAir));
+                    case DEFAULT ->
+                            ores.addAll(generateNormal(world, random, new BlockPos(x, y, z), ore.size, ore.discardOnAir));
                     case EMERALD -> {
                         if (airCheck.get() == AirCheck.OFF || world.getBlockState(new BlockPos(x, y, z)).isOpaque()) {
                             ores.add(new Vec3d(x, y, z));

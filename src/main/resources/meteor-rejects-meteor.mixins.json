@@ -3,12 +3,22 @@
   "package": "anticope.rejects.mixin.meteor",
   "compatibilityLevel": "JAVA_16",
   "client": [
-    "CommandsMixin",
+    "AccountMixin",
+    "AccountsMixin",
+    "AccountsScreenMixin",
     "ConfigTabMixin",
+    "DefaultSettingsWidgetFactoryMixin",
+    "FontUtilsMixin",
     "GuiRendererAccessor",
     "HttpMixin",
+    "HttpRequestMixin",
+    "ModuleMixin",
     "ModulesMixin",
+    "WAccountMixin",
+    "modules.AutoSignMixin",
     "modules.FlightMixin",
-    "modules.NoRenderAccessor"
+    "modules.InventoryTweaksMixin",
+    "modules.KillAuraMixin",
+    "modules.NoRenderMixin"
   ]
 }

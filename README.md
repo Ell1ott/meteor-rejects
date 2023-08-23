@@ -31,20 +31,26 @@
 
 # Features
 ## Modules
-- AntiBot (Removed from Meteor in [166fc](https://github.com/MeteorDevelopment/meteor-client/commit/166fccc73e53de6cfdbe41ea58dc593a2f5011f6#diff-05896d5a7f735a14ee8da5d12fbd24585862ca68efdf32b9401b3f4329d17c73))
-- Insta Mine (Removed from Meteor in [62cd0](https://github.com/MeteorDevelopment/meteor-client/commit/62cd0461e48a6c50f040bf48de25be1fa4eba77e))
+- AimAssist (Removed from Meteor in [ee391](https://github.com/MeteorDevelopment/meteor-client/commit/ee391e431f345f253447f425dbc0de8625f88e65))
+- AntiBot (Removed from Meteor in [166fc](https://github.com/MeteorDevelopment/meteor-client/commit/166fccc73e53de6cfdbe41ea58dc593a2f5011f6))
+- AntiCrash (Ported from [Anti-ClientCrasher](https://github.com/wagyourtail/Anti-ClientCrasher))
 - AntiSpawnpoint
 - AntiVanish
+- ArrowDmg (Ported from [Wurst](https://github.com/Wurst-Imperium/Wurst7/tree))
 - AutoBedTrap (Ported from [BleachHack-CupEdition](https://github.com/CUPZYY/BleachHack-CupEdition/blob/master/CupEdition-1.17/src/main/java/bleach/hack/module/mods/AutoBedtrap.java))
 - AutoCraft (More generalized version of [AutoBedCraft](https://github.com/Anticope/orion/blob/main/src/main/java/me/ghosttypes/orion/modules/main/AutoBedCraft.java) from orion)
 - AutoExtinguish
+- AutoFarm
+- AutoGrind
+- AutoLogin
 - AutoPot (Taken from an [unmerged PR](https://github.com/MeteorDevelopment/meteor-client/pull/274))
+- AutoSoup (Ported from [Wurst](https://github.com/Wurst-Imperium/Wurst7/tree))
 - AutoTNT
 - AutoWither (Taken from an [unmerged PR](https://github.com/MeteorDevelopment/meteor-client/pull/1070))
 - BlockIn
-- BonemealAura (Ported from [JexClient](https://github.com/DustinRepo/JexClient/blob/main/src/main/java/me/dustin/jex/feature/mod/impl/world/BonemealAura.java))
 - BoatGlitch & BoatPhase (Taken from an [unmerged PR](https://github.com/MeteorDevelopment/meteor-client/pull/814))
 - Boost (Ported from [Cornos](https://github.com/cornos/Cornos/blob/master/src/main/java/me/zeroX150/cornos/features/module/impl/movement/Boost.java))
+- BungeeCordSpoof (Ported from [LiquidBounce](https://github.com/CCBlueX/LiquidBounce))
 - ChatBot
 - ChestAura
 - ChorusExploit (Taken from an [unmerged PR](https://github.com/MeteorDevelopment/meteor-client/pull/1727))
@@ -52,19 +58,33 @@
 - Confuse
 - Coord Logger (World events from [JexClient](https://github.com/DustinRepo/JexClient-main/blob/main/src/main/java/me/dustin/jex/feature/mod/impl/misc/CoordFinder.java))
 - Custom Packets
+- Extra Elytra (Ported from [Wurst](https://github.com/Wurst-Imperium/Wurst7/tree))
+- FullFlight (Antikick bypasses by [CCblueX](https://github.com/CCblueX) and [LiveOverflow](https://github.com/LiveOverflow))
+- Gamemode notifier
 - Ghost Mode (Taken from an [unmerged PR](https://github.com/MeteorDevelopment/meteor-client/pull/1932))
 - Glide (Ported from [Wurst](https://github.com/Wurst-Imperium/Wurst7/tree))
+- Insta Mine (Removed from Meteor in [62cd0](https://github.com/MeteorDevelopment/meteor-client/commit/62cd0461e48a6c50f040bf48de25be1fa4eba77e))
+- Item generator (Ported from [Wurst](https://github.com/Wurst-Imperium/Wurst7/tree))
 - InteractionMenu (Ported from [BleachHack](https://github.com/BleachDrinker420/BleachHack/pull/211))
+- Jetpack
+- KnockbackPlus
 - Lavacast
-- NewChunks (Ported from [BleackHack](https://github.com/BleachDrinker420/BleachHack/blob/master/BleachHack-Fabric-1.17/src/main/java/bleach/hack/module/mods/NewChunks.java))
+- MossBot (Ported from [BleachHack](https://github.com/BleachDrinker420/BleachHack/pull/211))
+- NewChunks (Ported from [BleachHack](https://github.com/BleachDrinker420/BleachHack/blob/master/BleachHack-Fabric-1.17/src/main/java/bleach/hack/module/mods/NewChunks.java))
+- NoJumpDelay
 - ObsidianFarm (Taken from [Meteor ObsidianFarm Addon](https://github.com/VoidCyborg/meteor-obsidian-farm))
 - Oresim (Ported from [Atomic](https://gitlab.com/0x151/atomic))
 - PacketFly (Taken from an [unmerged PR](https://github.com/MeteorDevelopment/meteor-client/pull/813))
 - Painter
 - Rendering
+- RoboWalk ((Taken from an [unmerged PR](https://github.com/MeteorDevelopment/meteor-client/pull/3015)))
+- Shield Bypass
+- Silent Disconnect
 - SkeletonESP (Ported from [JexClient](https://github.com/DustinRepo/JexClient-main/blob/main/src/main/java/me/dustin/jex/feature/mod/impl/render/Skeletons.java))
 - SoundLocator
+- Server Finder (Ported from [MeteorAdditions](https://github.com/JFronny/MeteorAdditions))
 - TreeAura (Taken from an [unmerged PR](https://github.com/MeteorDevelopment/meteor-client/pull/2138))
+- VehicleOneHit (Taken from an [unmerged PR](https://github.com/MeteorDevelopment/meteor-client/pull/3539))
 
 ### Modifications
 - NoRender
@@ -72,6 +92,15 @@
   - `disableToasts`
 - Flight
   - `stopMomentum`
+- AutoSign
+  - `Random characters` (Ported from [BleachHack](https://github.com/BleachDrinker420/BleachHack))
+- Module
+  - `Duplicate names`
+- KillAura
+  - `Fov and invisible filter`
+  - `Random Teleport, Hit Chance, Random Delay` (Removed from Meteor in [8722e](https://github.com/MeteorDevelopment/meteor-client/commit/8722ef565afa02ca4b6d9710a20fc9fcfd97bf05))
+- Alts
+  -  `Yggdrasil Login`
 
 ## Commands
 - `.center`
@@ -102,5 +131,8 @@
 - Radar HUD
 
 ## Config
-- `Http Allowed` - modify what http requests can be made with Meteor's http api
-- `Hidden Modules` - hide modules from module gui. **requires restart when unhiding**
+- `Http Allowed` - Modify what HTTP requests can be made with Meteor's HTTP API
+- `Http User Agent` - Modify the HTTP header of Meteor's HTTP API
+- `Hidden Modules` - Hide modules from module gui. **requires restart when unhiding**
+- `Load System Fonts` - Disabling this for faster launch. You can put font into meteor-client/fonts folder. **requires restart to take effect**
+- `Duplicate Module Names` - Allow duplicate module names. Enable it when you have one module overriding another.

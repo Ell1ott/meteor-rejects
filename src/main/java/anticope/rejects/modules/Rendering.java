@@ -1,16 +1,15 @@
 package anticope.rejects.modules;
 
-import java.io.IOException;
-
 import anticope.rejects.MeteorRejectsAddon;
-import net.minecraft.client.gl.ShaderEffect;
-import net.minecraft.util.Identifier;
-
-import meteordevelopment.meteorclient.settings.EnumSetting;
 import meteordevelopment.meteorclient.settings.BoolSetting;
+import meteordevelopment.meteorclient.settings.EnumSetting;
 import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.systems.modules.Module;
+import net.minecraft.client.gl.PostEffectProcessor;
+import net.minecraft.util.Identifier;
+
+import java.io.IOException;
 
 public class Rendering extends Module {
 
@@ -86,7 +85,7 @@ public class Rendering extends Module {
 			.build()
 	);
     
-    private ShaderEffect shader = null;
+    private PostEffectProcessor shader = null;
     
     public Rendering() {
         super(MeteorRejectsAddon.CATEGORY, "rendering", "Various Render Tweaks");
@@ -109,7 +108,7 @@ public class Rendering extends Module {
         else name = s.toString().toLowerCase();
         Identifier shaderID = new Identifier(String.format("shaders/post/%s.json", name));
         try {
-            ShaderEffect shader = new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shaderID);
+            PostEffectProcessor shader = new PostEffectProcessor(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shaderID);
             this.shader = shader;
         } catch (IOException e) {
             this.shader = null;
@@ -120,7 +119,7 @@ public class Rendering extends Module {
         return this.isActive() && structureVoid.get();
     }
 
-    public ShaderEffect getShaderEffect() {
+    public PostEffectProcessor getShaderEffect() {
         if (!this.isActive()) return null;
         return shader;
     }

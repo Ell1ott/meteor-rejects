@@ -6,7 +6,6 @@ import meteordevelopment.meteorclient.events.render.Render3DEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.renderer.ShapeMode;
 import meteordevelopment.meteorclient.settings.*;
-import meteordevelopment.meteorclient.systems.modules.Categories;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.utils.player.Rotations;
 import meteordevelopment.meteorclient.utils.render.color.SettingColor;
@@ -89,7 +88,7 @@ public class InstaMine extends Module {
     @Override
     public void onActivate() {
         ticks = 0;
-        blockPos.set(0, -1, 0);
+        blockPos.set(0, -128, 0);
     }
 
     @EventHandler
@@ -119,7 +118,7 @@ public class InstaMine extends Module {
     }
 
     private boolean shouldMine() {
-        if (blockPos.getY() == -1) return false;
+        if (blockPos.getY() == -128) return false;
         if (!BlockUtils.canBreak(blockPos)) return false;
         return !pick.get() || (mc.player.getMainHandStack().getItem() == Items.DIAMOND_PICKAXE || mc.player.getMainHandStack().getItem() == Items.NETHERITE_PICKAXE);
     }

@@ -2,19 +2,17 @@ package anticope.rejects.modules;
 
 import anticope.rejects.MeteorRejectsAddon;
 import anticope.rejects.utils.WorldUtils;
-import meteordevelopment.orbit.EventHandler;
 import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.utils.player.FindItemResult;
 import meteordevelopment.meteorclient.utils.player.InvUtils;
 import meteordevelopment.meteorclient.utils.world.BlockUtils;
+import meteordevelopment.orbit.EventHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.ArrayList;
 
 public class Painter extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -39,6 +37,14 @@ public class Painter extends Module {
             .description("Delay between block placement (in ticks)")
             .min(0)
             .defaultValue(0)
+            .build()
+    );
+
+    private final Setting<Integer> bpt = sgGeneral.add(new IntSetting.Builder()
+            .name("blocks-per-tick")
+            .description("Amount of blocks that can be placed in one tick")
+            .min(1)
+            .defaultValue(1)
             .build()
     );
     
@@ -76,8 +82,7 @@ public class Painter extends Module {
             .defaultValue(true)
             .build()
     );
-    
-    private ArrayList<BlockPos> positions = new ArrayList<>();
+
     private int ticksWaited;
     
     public Painter() {
@@ -102,27 +107,26 @@ public class Painter extends Module {
         }
         
         // Find spots
+        int placed = 0;
         for (BlockPos blockPos : WorldUtils.getSphere(mc.player.getBlockPos(), range.get(), range.get())) {
-            if (shouldPlace(blockPos, block.get())) positions.add(blockPos);
-        }
-        
-        // Place
-        for (BlockPos blockPos : positions) {
-            BlockUtils.place(blockPos, findItemResult, rotate.get(), -100, false);
-    
-            // Delay 0
-            if (delay.get() != 0) break;
+            if (shouldPlace(blockPos, block.get())) {
+                BlockUtils.place(blockPos, findItemResult, rotate.get(), -100, false);
+                placed++;
+
+                // Delay 0
+                if (delay.get() != 0 && placed >= bpt.get()) break;
+            }
         }
     }
     
     private boolean shouldPlace(BlockPos blockPos, Block useBlock) {
         // Self
-        if (!mc.world.getBlockState(blockPos).getMaterial().isReplaceable()) return false;
+        if (!mc.world.getBlockState(blockPos).isReplaceable()) return false;
     
         // One block height
         if (!oneBlockHeight.get() &&
-                !mc.world.getBlockState(blockPos.up()).getMaterial().isReplaceable() &&
-                !mc.world.getBlockState(blockPos.down()).getMaterial().isReplaceable()) return false;
+                !mc.world.getBlockState(blockPos.up()).isReplaceable() &&
+                !mc.world.getBlockState(blockPos.down()).isReplaceable()) return false;
     
     
         boolean north = true;
@@ -140,21 +144,21 @@ public class Painter extends Module {
     
         // Top surface
         if (topSurfaces.get()) {
-            if (upState.getMaterial().isReplaceable() || upState.getBlock() == useBlock) up = false;
+            if (upState.isReplaceable() || upState.getBlock() == useBlock) up = false;
         }
         
         // Side surfaces
         if (sideSurfaces.get()) {
             
-            if (northState.getMaterial().isReplaceable() || northState.getBlock() == useBlock) north = false;
-            if (southState.getMaterial().isReplaceable() || southState.getBlock() == useBlock) south = false;
-            if (eastState.getMaterial().isReplaceable() || eastState.getBlock() == useBlock) east = false;
-            if (westState.getMaterial().isReplaceable() || westState.getBlock() == useBlock) west = false;
+            if (northState.isReplaceable() || northState.getBlock() == useBlock) north = false;
+            if (southState.isReplaceable() || southState.getBlock() == useBlock) south = false;
+            if (eastState.isReplaceable() || eastState.getBlock() == useBlock) east = false;
+            if (westState.isReplaceable() || westState.getBlock() == useBlock) west = false;
         }
         
         // Bottom surface
         if (bottomSurfaces.get()) {
-            if (bottomState.getMaterial().isReplaceable() || bottomState.getBlock() == useBlock) bottom = false;
+            if (bottomState.isReplaceable() || bottomState.getBlock() == useBlock) bottom = false;
         }
     
         return north || south || east || west || up || bottom;

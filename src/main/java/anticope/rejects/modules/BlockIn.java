@@ -13,9 +13,11 @@ import meteordevelopment.meteorclient.utils.world.BlockUtils;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.FallingBlock;
+import net.minecraft.entity.MovementType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 public class BlockIn extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -57,14 +59,28 @@ public class BlockIn extends Module {
     
     private final BlockPos.Mutable bp = new BlockPos.Mutable();
     private boolean return_;
+    private double sY;
     
     public BlockIn() {
         super(MeteorRejectsAddon.CATEGORY, "block-in", "Block yourself in using any block.");
     }
     
+    @Override
+    public void onActivate() {
+        sY = mc.player.getPos().getY();
+    }
+    
     @EventHandler
     private void onPreTick(TickEvent.Pre event) {
-        if (center.get()) PlayerUtils.centerPlayer();
+        if (mc.player.isOnGround() && mc.player.getY()>Math.floor(mc.player.getY()+0.2)) mc.options.sneakKey.setPressed(true);
+        if (return_ && mc.options.sneakKey.isPressed()) mc.options.sneakKey.setPressed(false);
+        if (center.get()) {
+            if (!onlyOnGround.get()) {
+                mc.player.setVelocity(0,0,0);
+                mc.player.move(MovementType.SELF, new Vec3d(0, -(sY-Math.floor(sY)), 0));
+            }
+            PlayerUtils.centerPlayer();
+        }
         if (onlyOnGround.get() && !mc.player.isOnGround()) return;
         
         return_ = false;
