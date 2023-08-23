@@ -14,7 +14,8 @@
     "StructureVoidBlockMixin",
     "ToastManagerMixin",
     "LivingEntityMixin",
-    "baritone.MineProcessMixin"
+    "baritone.MineProcessMixin",
+    "TabMixin"
   ],
   "injectors": {
     "defaultRequire": 1

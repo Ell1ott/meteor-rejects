@@ -89,6 +89,16 @@ public class MeteorRoundedGuiTheme extends GuiTheme {
             .sliderMax(15)
             .build()
     );
+    public final Setting<Integer> pad = sgGeneral.add(new IntSetting.Builder()
+            .name("Padding")
+            .description("How much windows should be rounded")
+            .defaultValue(6)
+            .min(0)
+            .max(20)
+            .sliderMin(3)
+            .sliderMax(10)
+            .build()
+    );
 
     // Colors
 
@@ -301,6 +311,11 @@ public class MeteorRoundedGuiTheme extends GuiTheme {
     @Override
     public Color textSecondaryColor() {
         return textSecondaryColor.get();
+    }
+
+    @Override
+    public double pad(){
+        return scale(pad.get());
     }
 
     //     Starscript

@@ -1,14 +1,11 @@
 {
   "schemaVersion": 1,
   "id": "meteor-rejects",
-  "version": "${version}",
+  "version": "${1.19}",
 
   "name": "Meteor Rejects",
   "description": "An addon to Meteor Client that adds modules and commands that were too useless to be added to Meteor directly.",
-  "authors": [
-    "Cloudburst",
-    "StormyBytes"
-  ],
+  "authors": ["Cloudburst", "StormyBytes"],
   "contact": {
     "issues": "https://github.com/AntiCope/meteor-rejects/issues",
     "sources": "https://github.com/AntiCope/meteor-rejects"
@@ -19,24 +16,17 @@
 
   "environment": "client",
   "entrypoints": {
-    "meteor": [
-      "anticope.rejects.MeteorRejectsAddon"
-    ],
-    "seedcrackerx": [
-      "anticope.rejects.utils.SeedCrackerEP"
-    ]
+    "meteor": ["anticope.rejects.MeteorRejectsAddon"],
+    "seedcrackerx": ["anticope.rejects.utils.SeedCrackerEP"]
   },
-  "mixins": [
-    "meteor-rejects.mixins.json",
-    "meteor-rejects-meteor.mixins.json"
-  ],
+  "mixins": ["meteor-rejects.mixins.json", "meteor-rejects-meteor.mixins.json"],
   "custom": {
     "meteor-client:color": "227,0,0",
     "github:sha": "${gh_hash}"
   },
   "depends": {
     "java": ">=16",
-    "minecraft": "~${mc_version}",
+    "minecraft": "~1.19",
     "meteor-client": "*"
   }
 }
